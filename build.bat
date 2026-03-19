@@ -12,6 +12,7 @@ for /f "tokens=1,2 delims==" %%a in (config.properties) do (
 
 echo React path: %react.project.path%
 echo Java path: %java.project.path%
+echo Java folder: %java.version.folder%
 
 REM ================================
 REM BUILD DO REACT
@@ -69,10 +70,13 @@ REM CONFIGURAR JAVA (PORTATIL OU GLOBAL)
 REM ================================
 echo Verificando Java...
 
+REM CAMINHO DINAMICO DO JAVA PORTATIL
+set "JAVA_LOCAL=%~dp0tools\java\%java.version.folder%"
+
 REM TENTA JAVA PORTATIL
-IF EXIST "%~dp0tools\java\jdk-17\bin\java.exe" (
-    echo Usando Java portatil...
-    set "JAVA_HOME=%~dp0tools\java\jdk-17"
+IF EXIST "%JAVA_LOCAL%\bin\java.exe" (
+    echo Usando Java portatil: %java.version.folder%
+    set "JAVA_HOME=%JAVA_LOCAL%"
     set "PATH=%JAVA_HOME%\bin;%PATH%"
     goto java_ok
 )
@@ -81,7 +85,7 @@ REM USA JAVA DA MAQUINA
 IF NOT DEFINED JAVA_HOME (
     echo.
     echo JAVA_HOME nao esta configurado!
-    echo Instale o Java 17 ou use java portatil em tools\java\jdk-17
+    echo Instale o Java %java.version.folder% ou use java portatil em tools\java\%java.version.folder%
     goto erro
 )
 
